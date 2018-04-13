@@ -2,48 +2,65 @@
 <html ng-app="myfirstangularapp">
 
 <head>
-	<meta charset="utf-8" />
-	<title>AngularJS - Money</title>
-	<link data-require="bootstrap@*" data-semver="3.3.2" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<script data-require="bootstrap@*" data-semver="3.3.2" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<!-- 	<script>
-		document.write('<base href="' = document.location + '" />');
-	</script> -->
-	<!-- <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.0-rc.0/angular.js" data-semver="1.4.0-rc.0"></script>
-	<script data-require="jquery@2.1.3" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <meta charset="utf-8"/>
+    <title>AngularJS - Money</title>
+    <link data-require="bootstrap@*" data-semver="3.3.2" rel="stylesheet"
+          href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script data-require="bootstrap@*" data-semver="3.3.2"
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bower_components/Chart.js/Chart.js"></script>
+    <!-- 	<script>
+            document.write('<base href="' = document.location + '" />');
+        </script> -->
+    <!-- <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.0-rc.0/angular.js" data-semver="1.4.0-rc.0"></script>
+    <script data-require="jquery@2.1.3" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
  -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="app/app.css"/>
 </head>
 
 <body>
-	<div class="container">
-		<div ng-controller="MySecondController">
-			<p class="text-muted">
-				Stock data:
-				Symbol: {{symbol}}</p>
-			<p class="text-info" ng-repeat="item in stock">
-				[{{$index + 1}}] "Date: " {{item.date}} " Open: "{{item.open}}" Close: "{{item.close}} " Change: "{{item.change}}
-			</p>
-			<hr />
-			<div>
-				<my-input2/>
-				<label>iex return code:
-					<h4 ng-bind="status2"></h4>
-				</label>
-			</div>
-			<div>
-				<pre>{{stock | json}}</pre>
-				{{error2}}
-			</div>
-		</div>
-	</div>
-	  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-	<script src="app/app.js"></script>
-	<script src="app/controllers/controllers.js"></script>
+<div class="container">
+    <div ng-controller="MySecondController" style="width: 50%">
+        <hr/>
+        <p class="floating-box">
+            <img style="height:40px" ng-src="{{stock.logo}}">
+            <!--<label ng-style="label" >Symbol: {{symbol | uppercase}} </label>-->
+            <label ng-style="label">{{stock.companyInfo.companyName | uppercase}} </label>
+        </p>
+        <div class="floating-box">
+            <div>
+                <img class="floating-box" style="height:20px" ng-src="{{stock.indicatorUrl}}">
+                <div class="floating-box" ng-style="label">{{stock.priceChange }}</div>
+                <div class="floating-box" ng-style="label">{{stock.priceChangePercentLabel }}</div>
+            </div>
+            <div class="after-box" style="margin-left: 30px" ng-style="label">Today's Change</div>
+        </div>
+        <hr class="after-box"/>
+        <div>
+            <canvas id="myChart" width="500" height="300"></canvas>
+        </div>
+        <div>
+            <my-input/>
+            <label>iex return code:
+                <h4 ng-bind="status"></h4>
+            </label>
+        </div>
+        <div>
+            <pre>{{stock.companyInfo | json}}</pre>
+            {{error2}}
+        </div>
+        <!--<p class="text-info" ng-repeat="item in stock">-->
+        <!--[{{$index + 1}}] "Date: " {{item.date}} " Open: "{{item.open}}" Close: "{{item.close}} " Change: "{{item.change}}-->
+        <!--</p>-->
+    </div>
+</div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+<script src="app/app.js"></script>
+<script src="app/controllers/controllers.js"></script>
 <!-- 	<script src="data.js"></script> -->
-	<script src="app/filters/filters.js"></script>
-	<script src="app/services/services.js"></script>
-	<script src="app/directives/directives.js"></script>
+<script src="app/filters/filters.js"></script>
+<script src="app/services/services.js"></script>
+<script src="app/directives/directives.js"></script>
 </body>
 
 <!--     <h1>Hello AngularJS!</h1>

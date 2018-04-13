@@ -1,0 +1,57 @@
+body {
+    background-color: #121116;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+pre {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+label {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+.floating-box {
+    float : left;
+    margin: 10px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+.after-box {
+    clear: left;
+}
+.btn1 {
+    color: #121116;
+    border-radius: 10px;
+    background-color: white;
+    padding: 8px;
+    border: 2px solid #999;
+    font-weight:bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+input {
+    color: black;
+    border-radius: 10px;
+    background-color: white;
+    padding: 5px;
+    border: 2px solid #999;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+}
+
+input:nth-of-type(2):focus {
+    outline: 0;
+    -box-shadow: 0 0 10px blue;
+}
