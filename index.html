@@ -46,12 +46,17 @@
             </label>
         </div>
         <div>
-            <pre>{{stock.companyInfo | json}}</pre>
+            <p ng-style="label">{{stock.companyInfo.companyName}} is a
+                {{stock.companyInfo.industry}}
+                {{stock.companyInfo.sector}} company.
+                {{stock.companyInfo.description}}
+                The current CEO is {{stock.companyInfo.CEO}}.
+                For further information,
+                <a href="{{stock.companyInfo.website}}">Please click here</a>
+            </p>
             {{error2}}
         </div>
-        <!--<p class="text-info" ng-repeat="item in stock">-->
-        <!--[{{$index + 1}}] "Date: " {{item.date}} " Open: "{{item.open}}" Close: "{{item.close}} " Change: "{{item.change}}-->
-        <!--</p>-->
+
     </div>
 </div>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
@@ -62,25 +67,5 @@
 <script src="app/services/services.js"></script>
 <script src="app/directives/directives.js"></script>
 </body>
-
-<!--     <h1>Hello AngularJS!</h1>
-    <p>Under Angular control: </p>
-    <div ng-app>
-        {{ 'Hello ' + 'AngularJS!' }}
-        <br/>
-        <p style="padding-left: 30px;"/><label>Hello: </label>
-        <input ng-model="hello1"="text" />
-        <p>{{hello1}}</p>
-        <br/>
-        <label>Hello: </label>
-        <input ng-model="hello" type="text" />
-        <p>{{hello}}</p>
-    </div>
-    <br/>
-    <p> <b>Not</b> under angular control </p>
-    <div>
-        {{ 'Hello' + 'AngularJS!' }}
-    </div>
-</body> -->
 
 </html>
