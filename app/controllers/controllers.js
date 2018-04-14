@@ -5,7 +5,9 @@ var MySecondController = function ($scope, $http, stockData, companyInfo, stockP
             timeRiskInd.push(timeInd);
             dataRiskInd.push(riskInd);
     };
+    $scope.myChart;
     $scope.draw = function(results, interval) {
+        $scope.myChart != null ? $scope.myChart.destroy() : console.log("No Chart yet");
         var timeRiskInd = new Array();
         var dataRiskInd = new Array();
         let length=0, i=0;
@@ -103,31 +105,30 @@ var MySecondController = function ($scope, $http, stockData, companyInfo, stockP
         }
         var ctx =
             document.getElementById("myChart").getContext("2d");
-        new Chart(ctx).Line(data, {showXLabels: 10
+        $scope.myChart = new Chart(ctx).Line(data, {showXLabels: 10
         });
     };
 
-    $scope.getStockPriceByYear = function(symbol) {
+    var onPreSearchPrice = function(symbol) {
         console.log("symbol: " + symbol);
         symb = symbol;
-        companyInfo.getInfo(symbol).then(onLookupComplete, onError);
-        stockPriceByYear.searchStock(symbol).then(onSearchYearComplete, onError);
-        stockLogo.getLogo(symbol).then(onLogoComplete, onError);
-    };
-
-    $scope.getStockPriceByMonth = function(symbol) {
-        console.log("symbol: " + symbol);
-        symb = symbol;
-        companyInfo.getInfo(symbol).then(onLookupComplete, onError);
         stockPriceByMonth.searchStock(symbol).then(onSearchMonthComplete, onError);
-        stockLogo.getLogo(symbol).then(onLogoComplete, onError);
-    };
-    $scope.getStockPriceByDay = function(symbol) {
-        console.log("symbol: " + symbol);
-        symb = symbol;
-        companyInfo.getInfo(symbol).then(onLookupComplete, onError);
         stockPriceByDay.searchStock(symbol).then(onSearchDayComplete, onError);
         stockLogo.getLogo(symbol).then(onLogoComplete, onError);
+        companyInfo.getInfo(symbol).then(onLookupComplete, onError);
+    };
+    $scope.getStockPriceByYear = function(symbol) {
+        onPreSearchPrice(symbol);
+        stockPriceByYear.searchStock(symbol).then(onSearchYearComplete, onError);
+    };
+    $scope.getStockPriceByMonth = function(symbol) {
+        onPreSearchPrice(symbol);
+        stockPriceByMonth.searchStock(symbol).then(onPostMonthComplete, onError);
+    };
+    $scope.getStockPriceByDay = function(symbol) {
+        onPreSearchPrice(symbol);
+        stockPriceByDay.searchStock(symbol).then(onPostDayComplete, onError);
+
     };
 
     var onLookupComplete = function (response) {
@@ -139,7 +140,7 @@ var MySecondController = function ($scope, $http, stockData, companyInfo, stockP
         // $scope.stock.priceListByYear = response.data;
         //Shrink data
         var length = response.data.length;
-        console.log("Gang original year size: " + length);
+        console.log("original year size: " + length);
         var yearList = [];
         for (var i = 0; i < length; i++ ) {
             if (i == 0 || i == length -1 || (i + 1) % 5 == 0) {
@@ -147,25 +148,33 @@ var MySecondController = function ($scope, $http, stockData, companyInfo, stockP
             }
         }
         $scope.stock.priceListByYear = yearList;
-        console.log("Gang year size: " + yearList.length);
+        console.log("year size: " + yearList.length);
         $scope.statusPrices = response.status;
         $scope.draw($scope.stock, '1y');
     };
     var onSearchMonthComplete = function(response) {
         $scope.stock.priceListByMonth = response.data;
         $scope.statusPrices = response.status;
+    };
+    var onPostMonthComplete = function(response) {
+        $scope.stock.priceListByMonth = response.data;
+        $scope.statusPrices = response.status;
         $scope.draw($scope.stock, '');
+    };
+    var onPostDayComplete = function(response) {
+        $scope.stock.priceListByDay = response.data;
+        $scope.statusPrices = response.status;
+        $scope.draw($scope.stock, '1d');
     };
     var onSearchDayComplete = function(response) {
         $scope.stock.priceListByDay = response.data;
         $scope.statusPrices = response.status;
-        $scope.draw($scope.stock, '1d');
         onInitPriceChangeComplete();
     };
 
     var onLogoComplete = function(response) {
         $scope.stock.logo = response.data.url;
-        console.log("Gang" + response.data.url);
+        console.log("Logo" + response.data.url);
         $scope.statusLogo = response.status;
     }
     var onError = function(reason) {
@@ -173,26 +182,37 @@ var MySecondController = function ($scope, $http, stockData, companyInfo, stockP
         $scope.error = "Oops, something is wrong..";
     };
     var onInitPriceChangeComplete = function () {
-        var start = 0, end = 0;
-        var length = $scope.stock.priceListByDay.length;
-        if (length > 0) {
-            var iStart = 0;
-            while (iStart< length - 1 && $scope.stock.priceListByDay[iStart].average <=0) {
-                iStart++;
+        var dayLength = $scope.stock.priceListByDay.length;
+        var monthLength = $scope.stock.priceListByMonth.length;
+        var start = $scope.stock.priceListByMonth[monthLength - 1].close, end = $scope.stock.priceListByDay[dayLength - 1].average;
+        console.log("Previous Close: " + start, "Current Average: " + end);
+        if (dayLength > 0) {
+            var iStart = dayLength - 1;
+            while (iStart>=0 && $scope.stock.priceListByDay[iStart].average <=0) {
+                iStart--;
             }
-            if (iStart < length - 1) {
-                start = $scope.stock.priceListByDay[iStart].average;
-                end = $scope.stock.priceListByDay[length - 1].average;
+            if (iStart < 0) {
+                end = $scope.stock.priceListByMonth[monthLength - 1].close
+            } else {
+                end = $scope.stock.priceListByDay[iStart].average;
             }
             console.log("start: " + start + " end: " + end);
         }
+        var currentDate = new Date();
+        var currentDateString = (currentDate.getMonth() + 1) + '/' + currentDate.getDate() + '/' +  currentDate.getFullYear();
+        if (currentDateString >=  $scope.stock.priceListByMonth[monthLength - 1].date) {
+            //when month data updated today's summary;
+            start =  $scope.stock.priceListByMonth[monthLength - 2].close;
+            end =  $scope.stock.priceListByMonth[monthLength - 1].close;
+        }
         var change = Math.round((end - start) * 100) / 100;
         var changePercent = (Math.round((change/start) * 10000) /100);
+        $scope.stock.currentPrice = end;
         $scope.stock.indicatorUrl = ((end - start) > 0) ? "http://i.cdn.turner.com/money/.element/img/3.0/data/arrowUp.gif"
             : "http://i.cdn.turner.com/money/.element/img/3.0/data/arrowDown.gif";
         $scope.stock.priceChange = (end - start) > 0 ? "+ " + change : change;
         $scope.stock.priceChangePercentLabel =" | " + ((end - start) > 0 ?  "+ " + changePercent + "%" : changePercent + "%");
-    }
+    };
 
 };
 app.controller("MySecondController", MySecondController);

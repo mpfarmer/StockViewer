@@ -22,35 +22,38 @@
 <div class="container">
     <div ng-controller="MySecondController" style="width: 50%">
         <hr/>
-        <p class="floating-box">
-            <img style="height:40px" ng-src="{{stock.logo}}">
-            <!--<label ng-style="label" >Symbol: {{symbol | uppercase}} </label>-->
-            <label ng-style="label">{{stock.companyInfo.companyName | uppercase}} </label>
-        </p>
         <div class="floating-box">
             <div>
-                <img class="floating-box" style="height:20px" ng-src="{{stock.indicatorUrl}}">
-                <div class="floating-box" ng-style="label">{{stock.priceChange }}</div>
-                <div class="floating-box" ng-style="label">{{stock.priceChangePercentLabel }}</div>
+                <label class="floating-box" style="margin-left: 30px">{{stock.companyInfo.companyName | uppercase}} </label>
+                <label class="floating-box" style="margin-left: 20px">{{stock.companyInfo.exchange | toExchange}} </label>
             </div>
-            <div class="after-box" style="margin-left: 30px" ng-style="label">Today's Change</div>
+            <img class="after-box-center-div" style="height:40px" ng-src="{{stock.logo}}" ng-show="stock.logo"/>
+        </div>
+        <div class="floating-box">
+            <div>
+                <div class="floating-box" style="margin-left: 30px" ng-style="label">{{stock.currentPrice | to2Decimal }} </div>
+                <img class="floating-box" style="height:20px;margin-left: 10px" ng-src="{{stock.indicatorUrl}}"/>
+                <div class="floating-box" ng-style="label" style="margin-left: 10px">{{stock.priceChange }}</div>
+                <div class="floating-box" ng-style="label" style="margin-left: 10px">{{stock.priceChangePercentLabel }}</div>
+            </div>
+            <div class="after-box" style="margin-left: 30px; margin-top: 30px" ng-style="label" ng-show="stock.priceChange">Today's Change</div>
         </div>
         <hr class="after-box"/>
+        <div>
+            <my-input style="margin-left: 30px"/>
+            <label>iex return code:
+                <div ng-style="label" ng-bind="status"></div>
+            </label>
+        </div>
         <div>
             <canvas id="myChart" width="500" height="300"></canvas>
         </div>
         <div>
-            <my-input/>
-            <label>iex return code:
-                <h4 ng-bind="status"></h4>
-            </label>
-        </div>
-        <div>
-            <p ng-style="label">{{stock.companyInfo.companyName}} is a
+            <p ng-style="label" ng-show="stock.priceChange">{{stock.companyInfo.companyName}} is a
                 {{stock.companyInfo.industry}}
                 {{stock.companyInfo.sector}} company.
                 {{stock.companyInfo.description}}
-                The current CEO is {{stock.companyInfo.CEO}}.
+                The current CEO {{stock.companyInfo.CEO}}.
                 For further information,
                 <a href="{{stock.companyInfo.website}}">Please click here</a>
             </p>

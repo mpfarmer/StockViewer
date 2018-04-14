@@ -1,16 +1,16 @@
 app.factory('stockData', function() {
     return {
-        logo : "https://theriponadvance.com/wp-content/uploads/2016/12/stocks-1.jpg",
+        logo : "http://pluspng.com/img-png/stock-market-png-stock-exchange-icon-png-image-9911-256.png",
         companyInfo: {
-            symbol: "AAPL",
-            companyName: "Apple Inc.",
-            exchange: "Nasdaq Global Select",
-            industry: "Computer Hardware",
-            website: "http://www.apple.com",
-            description: "Apple Inc is an American multinational technology company. It designs, manufactures, and markets mobile communication and media devices, personal computers, and portable digital music players.",
-            CEO: "Timothy D. Cook",
-            issueType: "cs",
-            sector: "Technology"
+            symbol: "",
+            companyName: "StockTracker",
+            exchange: "",
+            industry: "",
+            website: "http://www.github.com/mpfarmer",
+            description: "",
+            CEO: "",
+            issueType: "",
+            sector: ""
         },
         priceListByYear: [{
             date: "2018-03-12",
@@ -37,7 +37,7 @@ app.factory('stockData', function() {
             label: "09:40 AM",
             high: 173.61,
             low: 173.5,
-            average: 173.541,
+            average: 0.00,
             volume: 1285,
             notional: 223000.21,
             numberOfTrades: 14,
